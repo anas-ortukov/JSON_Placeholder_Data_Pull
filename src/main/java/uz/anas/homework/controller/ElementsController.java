@@ -1,82 +1,48 @@
 package uz.anas.homework.controller;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
-import uz.anas.homework.dto.CommentDto;
-import uz.anas.homework.dto.PhotoDto;
-import uz.anas.homework.dto.MainDto;
-import uz.anas.homework.dto.UserDto;
-
-import java.util.List;
+import uz.anas.homework.config.JwtUtil;
 
 @RestController
 @RequestMapping("/api/elements")
+@RequiredArgsConstructor
 public class ElementsController {
+
+    private final JwtUtil jwtUtil;
 
     @GetMapping("/users")
     public ResponseEntity<?> getAllUsers() {
-        Gson gson = new Gson();
-        RestTemplate restTemplate = new RestTemplate();
-        String forObject = restTemplate.getForObject("https://jsonplaceholder.typicode.com/users", String.class);
-        List<UserDto>  users = gson.fromJson(forObject,
-                new TypeToken<List<UserDto>>() {}.getType());
-        return ResponseEntity.ok(users);
+        return ResponseEntity.ok(jwtUtil.getDataFromAPI("https://jsonplaceholder.typicode.com/users"));
     }
 
     @GetMapping("/posts/{userId}")
     public ResponseEntity<?> getPostsByUser(@PathVariable Integer userId) {
-        Gson gson = new Gson();
-        RestTemplate restTemplate = new RestTemplate();
-        String forObject = restTemplate.getForObject("https://jsonplaceholder.typicode.com/posts?userId=" + userId, String.class);
-        List<MainDto>  posts = gson.fromJson(forObject,
-                new TypeToken<List<MainDto>>() {}.getType());
-        return ResponseEntity.ok(posts);
+        return ResponseEntity.ok(jwtUtil.getDataFromAPI("https://jsonplaceholder.typicode.com/posts?userId=" + userId));
     }
 
     @GetMapping("/comments/{postId}")
     public ResponseEntity<?> getCommentsByPost(@PathVariable Integer postId) {
-        Gson gson = new Gson();
-        RestTemplate restTemplate = new RestTemplate();
-        String forObject = restTemplate.getForObject("https://jsonplaceholder.typicode.com/comments?postId=" + postId, String.class);
-        List<CommentDto>  comments = gson.fromJson(forObject,
-                new TypeToken<List<CommentDto>>() {}.getType());
-        return ResponseEntity.ok(comments);
+        return ResponseEntity.ok(jwtUtil.getDataFromAPI("https://jsonplaceholder.typicode.com/comments?postId=" + postId));
     }
 
     @GetMapping("/albums/{userId}")
     public ResponseEntity<?> getAlbumsByUser(@PathVariable Integer userId) {
-        Gson gson = new Gson();
-        RestTemplate restTemplate = new RestTemplate();
-        String forObject = restTemplate.getForObject("https://jsonplaceholder.typicode.com/albums?userId=" + userId, String.class);
-        List<MainDto>  albums = gson.fromJson(forObject,
-                new TypeToken<List<MainDto>>() {}.getType());
-        return ResponseEntity.ok(albums);
+        return ResponseEntity.ok(jwtUtil.getDataFromAPI("https://jsonplaceholder.typicode.com/albums?userId=" +  userId));
     }
 
     @GetMapping("/photos/{albumId}")
     public ResponseEntity<?> getPhotosByUser(@PathVariable Integer albumId) {
-        Gson gson = new Gson();
-        RestTemplate restTemplate = new RestTemplate();
-        String forObject = restTemplate.getForObject("https://jsonplaceholder.typicode.com/photos?albumId=" + albumId, String.class);
-        List<PhotoDto>  photos = gson.fromJson(forObject,
-                new TypeToken<List<PhotoDto>>() {}.getType());
-        return ResponseEntity.ok(photos);
+        return ResponseEntity.ok(jwtUtil.getDataFromAPI("https://jsonplaceholder.typicode.com/photos?albumId=" + albumId));
     }
 
     @GetMapping("/todos/{userId}")
     public ResponseEntity<?> getTodosByUser(@PathVariable Integer userId) {
-        Gson gson = new Gson();
-        RestTemplate restTemplate = new RestTemplate();
-        String forObject = restTemplate.getForObject("https://jsonplaceholder.typicode.com/todos?userId=" + userId, String.class);
-        List<MainDto>  albums = gson.fromJson(forObject,
-                new TypeToken<List<MainDto>>() {}.getType());
-        return ResponseEntity.ok(albums);
+        return ResponseEntity.ok(jwtUtil.getDataFromAPI("https://jsonplaceholder.typicode.com/todos?userId=" + userId));
     }
 
 }

@@ -8,6 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 import javax.crypto.SecretKey;
 import java.util.Arrays;
@@ -71,5 +72,10 @@ public class JwtUtil {
     public List<GrantedAuthority> getAuthorities(String token) {
         String authorities = getClaims(token).get("authorities", String.class);
         return Arrays.stream(authorities.split(",")).map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+    }
+
+    public String getDataFromAPI(String URI) {
+        RestTemplate restTemplate = new RestTemplate();
+        return restTemplate.getForObject(URI, String.class);
     }
 }
